@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Human Hands, AI Tools — A Conference Session for CTE Instructors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --spruce:#1f3b2c;
+    --ridge:#2b4a4d;
+    --brass:#b8843d;
+    --chalk:#efe9db;
+    --ember:#a6402f;
+    --fog:#f8f5ec;
+    --ink:#1b241f;
+    --line: rgba(31,59,44,0.18);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--chalk);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    font-size:17px;
+    line-height:1.6;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .mono{
+    font-family:'JetBrains Mono', monospace;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    font-size:0.72rem;
+  }
+  a{color:inherit;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  /* ---------- topo texture ---------- */
+  .topo-bg{
+    position:absolute; inset:0;
+    background-image:
+      repeating-radial-gradient(circle at 18% 30%, transparent 0 34px, rgba(248,245,236,0.055) 35px, transparent 36px),
+      repeating-radial-gradient(circle at 82% 70%, transparent 0 46px, rgba(248,245,236,0.05) 47px, transparent 48px);
+    pointer-events:none;
+  }
+
+  /* ---------- header / nav ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(31,59,44,0.96);
+    color:var(--fog);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(248,245,236,0.12);
+  }
+  .nav-wrap{
+    max-width:1120px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 28px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Fraunces', serif; font-weight:600; font-size:1.05rem;
+  }
+  .brand svg{flex-shrink:0;}
+  nav ul{
+    list-style:none; display:flex; gap:26px; margin:0; padding:0;
+  }
+  nav a{
+    text-decoration:none; font-size:0.82rem; letter-spacing:0.06em; text-transform:uppercase;
+    font-family:'JetBrains Mono', monospace; color:var(--chalk); opacity:0.8;
+    border-bottom:1px solid transparent; padding-bottom:3px;
+    transition:opacity 0.2s, border-color 0.2s;
+  }
+  nav a:hover{opacity:1; border-color:var(--brass);}
+  @media (max-width:720px){ nav ul{display:none;} }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    background:linear-gradient(180deg, var(--spruce) 0%, #234433 62%, var(--ridge) 100%);
+    color:var(--fog);
+    padding:96px 28px 120px;
+  }
+  .hero-inner{
+    position:relative; z-index:2;
+    max-width:1120px; margin:0 auto;
+  }
+  .hero .eyebrow{
+    color:var(--brass); margin-bottom:22px; display:flex; align-items:center; gap:10px;
+  }
+  .hero .eyebrow::before{
+    content:""; width:26px; height:1px; background:var(--brass); display:inline-block;
+  }
+  .hero h1{
+    font-size:clamp(2.6rem, 6vw, 5rem);
+    font-weight:600;
+    max-width:14ch;
+  }
+  .hero h1 em{
+    font-style:italic; color:var(--brass); font-weight:500;
+  }
+  .hero p.lede{
+    max-width:52ch; margin-top:26px; font-size:1.15rem; color:rgba(248,245,236,0.86);
+  }
+  .hero-meta{
+    margin-top:44px; display:flex; flex-wrap:wrap; gap:34px;
+  }
+  .hero-meta div{border-left:1px solid rgba(248,245,236,0.25); padding-left:14px;}
+  .hero-meta .mono{color:var(--brass); display:block; margin-bottom:4px;}
+  .hero-meta strong{font-family:'Fraunces',serif; font-weight:500; font-size:1.05rem;}
+
+  .ridgeline{
+    position:absolute; left:0; right:0; bottom:-2px; z-index:1; line-height:0;
+  }
+
+  /* ---------- trail rail ---------- */
+  .trail-page{
+    max-width:1120px; margin:0 auto; padding:0 28px;
+    position:relative;
+  }
+  .trail-svg{
+    position:absolute; left:36px; top:0; bottom:0; width:2px;
+    z-index:0;
+  }
+  .trail-svg .line{
+    stroke:var(--brass); stroke-width:2; stroke-dasharray:1 10; stroke-linecap:round;
+  }
+  @media (max-width:720px){ .trail-svg{display:none;} }
+
+  section.stop{
+    position:relative;
+    padding:86px 0 86px 0;
+    border-bottom:1px solid var(--line);
+  }
+  section.stop:last-of-type{border-bottom:none;}
+  .waypoint{
+    display:flex; align-items:center; gap:16px; margin-bottom:30px;
+  }
+  .waypoint .marker{
+    width:74px; height:74px; border-radius:50%;
+    background:var(--spruce); color:var(--fog);
+    display:flex; align-items:center; justify-content:center;
+    border:3px solid var(--brass); flex-shrink:0;
+    font-family:'JetBrains Mono', monospace; font-size:0.68rem;
+    text-align:center; line-height:1.25; padding:4px;
+    position:relative; z-index:1;
+  }
+  .waypoint .label-group .mono{color:var(--brass); margin-bottom:6px;}
+  .waypoint .label-group h2{font-size:2rem; font-weight:600;}
+  .stop-body{
+    padding-left:90px;
+  }
+  @media (max-width:720px){
+    .stop-body{padding-left:0;}
+    .waypoint .marker{width:58px; height:58px; font-size:0.58rem;}
+  }
+
+  /* overview */
+  .overview-grid{
+    display:grid; grid-template-columns:1.3fr 1fr; gap:48px;
+  }
+  .overview-grid p{max-width:60ch;}
+  .takeaways{
+    background:var(--fog); border:1px solid var(--line); border-radius:4px; padding:26px 28px;
+  }
+  .takeaways .mono{color:var(--ember); margin-bottom:14px; display:block;}
+  .takeaways ul{margin:0; padding-left:20px;}
+  .takeaways li{margin-bottom:10px;}
+  @media (max-width:820px){ .overview-grid{grid-template-columns:1fr;} }
+
+  /* speaker */
+  .speaker-card{
+    display:flex; gap:32px; align-items:flex-start;
+  }
+  .speaker-photo{
+    width:132px; height:132px; border-radius:6px; flex-shrink:0;
+    background:linear-gradient(155deg, var(--ridge), var(--spruce));
+    display:flex; align-items:center; justify-content:center;
+    color:var(--brass); border:2px solid var(--brass);
+  }
+  .speaker-bio h3{font-size:1.5rem; margin-bottom:4px;}
+  .speaker-bio .role{color:var(--ridge); font-family:'JetBrains Mono',monospace; font-size:0.82rem; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:16px; display:block;}
+  .speaker-bio p{max-width:62ch;}
+  @media (max-width:600px){ .speaker-card{flex-direction:column;} }
+
+  /* resources */
+  .resource-list{display:flex; flex-direction:column; gap:14px; max-width:640px;}
+  .resource-row{
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+    background:var(--fog); border:1px solid var(--line); border-radius:4px;
+    padding:18px 22px;
+  }
+  .resource-row .rname{font-family:'Fraunces',serif; font-weight:600; font-size:1.05rem;}
+  .resource-row .rmeta{font-family:'JetBrains Mono',monospace; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--ridge); margin-top:3px;}
+  .btn-download{
+    font-family:'JetBrains Mono',monospace; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em;
+    background:var(--spruce); color:var(--fog); border:none; padding:10px 16px; border-radius:3px;
+    text-decoration:none; white-space:nowrap; cursor:pointer;
+  }
+
+  /* toolbox */
+  .tool-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:18px;
+  }
+  .tool-card{
+    border:1px solid var(--line); border-radius:4px; padding:22px;
+    background:var(--fog);
+    display:flex; flex-direction:column; gap:10px;
+    text-decoration:none; color:var(--ink);
+    transition:border-color 0.2s, transform 0.2s;
+  }
+  .tool-card:hover{border-color:var(--brass); transform:translateY(-2px);}
+  .tool-card .tag{
+    font-family:'JetBrains Mono',monospace; font-size:0.65rem; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--ember); width:fit-content; border:1px solid var(--ember); padding:2px 8px; border-radius:20px;
+  }
+  .tool-card h4{font-family:'Fraunces',serif; font-size:1.15rem; font-weight:600;}
+  .tool-card p{font-size:0.92rem; color:#3d453f; margin:0;}
+
+  /* contact */
+  .contact-wrap{
+    display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;
+  }
+  form{display:flex; flex-direction:column; gap:16px; max-width:460px;}
+  label{font-family:'JetBrains Mono',monospace; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ridge); margin-bottom:6px; display:block;}
+  input, textarea{
+    width:100%; font-family:'Work Sans',sans-serif; font-size:0.98rem;
+    padding:11px 12px; border:1px solid var(--line); border-radius:3px;
+    background:var(--fog); color:var(--ink);
+  }
+  input:focus, textarea:focus, .btn-download:focus, .tool-card:focus, a:focus{
+    outline:2px solid var(--ember); outline-offset:2px;
+  }
+  textarea{resize:vertical; min-height:110px;}
+  .btn-primary{
+    font-family:'JetBrains Mono',monospace; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em;
+    background:var(--ember); color:var(--fog); border:none; padding:13px 18px; border-radius:3px;
+    cursor:pointer; width:fit-content;
+  }
+  .contact-side .mono{color:var(--brass); display:block; margin-bottom:10px;}
+  .contact-side p{max-width:40ch;}
+  .contact-side .direct{margin-top:26px; padding-top:20px; border-top:1px solid var(--line);}
+  @media (max-width:820px){ .contact-wrap{grid-template-columns:1fr;} }
+
+  footer{
+    background:var(--spruce); color:rgba(248,245,236,0.65);
+    padding:34px 28px; text-align:center;
+    font-family:'JetBrains Mono',monospace; font-size:0.72rem; letter-spacing:0.05em;
+  }
+  footer strong{color:var(--brass);}
+
+  ::selection{background:var(--brass); color:var(--spruce);}
+
+  /* ---------- clickable state ---------- */
+  .resource-row, .tool-card{cursor:pointer;}
+  .resource-row:focus-visible, .tool-card:focus-visible{outline:2px solid var(--ember); outline-offset:2px;}
+  .resource-row:hover{border-color:var(--brass);}
+  .resource-row{position:relative;}
+  .resource-row .rmeta{display:flex; align-items:center; gap:8px;}
+  .expand-hint{
+    font-family:'JetBrains Mono',monospace; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.08em;
+    color:var(--brass); white-space:nowrap;
+  }
+
+  /* ---------- modal ---------- */
+  .modal-backdrop{
+    position:fixed; inset:0; z-index:200;
+    background:rgba(15,26,19,0.72);
+    backdrop-filter:blur(3px);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity 0.22s ease;
+    padding:4vh 3vw;
+  }
+  .modal-backdrop.open{opacity:1; pointer-events:auto;}
+  .modal-panel{
+    background:var(--fog);
+    width:100%; max-width:1180px; height:92vh;
+    border-radius:6px; border:1px solid rgba(184,132,61,0.5);
+    box-shadow:0 30px 80px rgba(10,20,14,0.45);
+    display:flex; flex-direction:column;
+    transform:translateY(18px) scale(0.98);
+    transition:transform 0.28s cubic-bezier(.2,.8,.3,1);
+    overflow:hidden;
+  }
+  .modal-backdrop.open .modal-panel{transform:translateY(0) scale(1);}
+  .modal-head{
+    background:var(--spruce); color:var(--fog);
+    padding:20px 26px; display:flex; align-items:flex-start; justify-content:space-between; gap:20px;
+    flex-shrink:0; border-bottom:3px solid var(--brass);
+  }
+  .modal-head .mono{color:var(--brass); display:block; margin-bottom:6px;}
+  .modal-head h3{font-family:'Fraunces',serif; font-size:1.5rem; font-weight:600; max-width:62ch;}
+  .modal-close{
+    background:transparent; border:1px solid rgba(248,245,236,0.4); color:var(--fog);
+    width:38px; height:38px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    font-size:1.1rem; line-height:1; transition:background 0.2s, border-color 0.2s;
+  }
+  .modal-close:hover{background:rgba(248,245,236,0.12); border-color:var(--brass);}
+  .modal-body{
+    flex:1; overflow-y:auto; padding:28px 30px; display:flex; flex-direction:column; gap:20px;
+  }
+  .modal-body p{max-width:72ch;}
+  .modal-body .modal-desc{font-size:1.02rem; color:#333c36;}
+  .modal-frame-wrap{
+    flex:1; min-height:0; border:1px solid var(--line); border-radius:4px; overflow:hidden;
+    background:#3a3f38; display:flex;
+  }
+  .modal-frame-wrap iframe{width:100%; height:100%; border:none; min-height:55vh;}
+  .modal-foot{
+    padding:18px 30px; border-top:1px solid var(--line); background:var(--fog);
+    display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; flex-shrink:0;
+  }
+  .modal-foot .filemeta{font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--ridge); text-transform:uppercase; letter-spacing:0.05em;}
+  .modal-tag-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:4px;}
+  @media (max-width:720px){
+    .modal-backdrop{padding:0;}
+    .modal-panel{height:100vh; max-width:100%; border-radius:0;}
+    .modal-body{padding:20px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrap">
+    <div class="brand">
+      <svg width="26" height="22" viewBox="0 0 26 22" fill="none"><path d="M1 21 L9 5 L13 12 L17 3 L25 21 Z" stroke="#B8843D" stroke-width="1.6" stroke-linejoin="round" fill="none"/></svg>
+      Human Hands, AI Tools
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#guide">Speaker</a></li>
+        <li><a href="#gear">Resources</a></li>
+        <li><a href="#toolbox">Toolbox</a></li>
+        <li><a href="#basecamp">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="topo-bg"></div>
+  <div class="hero-inner">
+    <div class="eyebrow mono">A Conference Session for CTE Instructors</div>
+    <h1>Human Hands, <em>AI Tools.</em></h1>
+    <p class="lede">The craft stays in your students' hands. AI just hands them a better set of tools. A practical session on bringing AI into Career &amp; Technical Education without losing what makes CTE work.</p>
+    <div class="hero-meta">
+      <div>
+        <span class="mono">Track</span>
+        <strong>Career &amp; Technical Education</strong>
+      </div>
+      <div>
+        <span class="mono">Format</span>
+        <strong>60-minute session</strong>
+      </div>
+      <div>
+        <span class="mono">Level</span>
+        <strong>No AI experience required</strong>
+      </div>
+    </div>
+  </div>
+  <div class="ridgeline">
+    <svg viewBox="0 0 1440 90" width="100%" height="90" preserveAspectRatio="none"><path d="M0,90 L0,55 L120,30 L260,60 L400,20 L560,50 L720,10 L900,48 L1040,25 L1200,58 L1320,35 L1440,55 L1440,90 Z" fill="#EFE9DB"/></svg>
+  </div>
+</section>
+
+<div class="trail-page">
+  <svg class="trail-svg" preserveAspectRatio="none"><line class="line" x1="1" y1="0" x2="1" y2="100%"/></svg>
+
+  <section class="stop" id="overview">
+    <div class="waypoint">
+      <div class="marker">TRAIL<br>HEAD</div>
+      <div class="label-group">
+        <span class="mono">Stop 01 — Overview</span>
+        <h2>What this session covers</h2>
+      </div>
+    </div>
+    <div class="stop-body overview-grid">
+      <div>
+        <p>CTE instructors are being asked to prepare students for careers that AI is already reshaping — welding shops with automated quality checks, culinary programs pricing menus with forecasting tools, health science labs using AI-assisted diagnostics. This session is a working session, not a lecture: we'll look at where AI genuinely helps hands-on instruction, where it gets in the way, and how to bring it into a shop, lab, or classroom without losing the hands-on skill-building CTE is built on.</p>
+        <p>You'll leave with a short list of tools worth trying, a way to think about when AI use supports a skill versus replaces it, and language for talking to students and administrators about responsible use.</p>
+      </div>
+      <div class="takeaways">
+        <span class="mono">You'll walk away with</span>
+        <ul>
+          <li>A framework for deciding when AI supports instruction versus undercuts the skill being taught</li>
+          <li>Three ready-to-use AI-assisted lesson ideas across different CTE pathways</li>
+          <li>A starter toolkit of AI tools vetted for classroom and shop use</li>
+          <li>Talking points for discussing AI use with students and administrators</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="guide">
+    <div class="waypoint">
+      <div class="marker">BASE<br>CAMP</div>
+      <div class="label-group">
+        <span class="mono">Stop 02 — Your Guide</span>
+        <h2>Who's leading the session</h2>
+      </div>
+    </div>
+    <div class="stop-body">
+      <div class="speaker-card">
+        <div class="speaker-photo">
+          <img src="clifford-headshot-web.jpg" alt="Cliff Sullivan" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
+        </div>
+        <div class="speaker-bio">
+          <h3>Cliff Sullivan</h3>
+          <span class="role">Computer Science and AI Coordinator — West Virginia Department of Education</span>
+          <p>Cliff has spent 18 years in education, beginning as a New York City Teaching Fellow in the Bronx, where he earned his MST from Fordham University. He now serves as Computer Science and AI Coordinator for the West Virginia Department of Education and is a Code.org CS Foundations facilitator and former STEAM TAC specialist with WVU. Cliff has led innovative makerspace development, bringing 3-D printing, CNC routing, laser cutting, robotics, game design, pottery, and video production to middle school learners. He has also coached multiple after-school robotics programs and a competitive drone team, championing hands-on, future-ready learning across the state.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="gear">
+    <div class="waypoint">
+      <div class="marker">GEAR<br>CACHE</div>
+      <div class="label-group">
+        <span class="mono">Stop 03 — Resources</span>
+        <h2>Session materials</h2>
+      </div>
+    </div>
+    <div class="stop-body">
+      <div class="resource-list">
+        <div class="resource-row" onclick="openResourceModal('prompting')" tabindex="0" role="button" aria-haspopup="dialog">
+          <div>
+            <div class="rname">The Prompting Playbook</div>
+            <div class="rmeta">PDF · 3 pages · Prompt framework + trade-specific examples</div>
+          </div>
+          <span class="expand-hint">Preview →</span>
+        </div>
+        <div class="resource-row" onclick="openResourceModal('lesson')" tabindex="0" role="button" aria-haspopup="dialog">
+          <div>
+            <div class="rname">Building Lessons with Copilot</div>
+            <div class="rmeta">PDF · 3 pages · Six-step lesson workflow + worked example</div>
+          </div>
+          <span class="expand-hint">Preview →</span>
+        </div>
+        <div class="resource-row" onclick="openResourceModal('beyond')" tabindex="0" role="button" aria-haspopup="dialog">
+          <div>
+            <div class="rname">Beyond Chat: Other Copilot Tools</div>
+            <div class="rmeta">PDF · 2 pages · Word, PowerPoint, Excel &amp; responsible use</div>
+          </div>
+          <span class="expand-hint">Preview →</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="toolbox">
+    <div class="waypoint">
+      <div class="marker">THE<br>TOOL&shy;BOX</div>
+      <div class="label-group">
+        <span class="mono">Stop 04 — AI Tools</span>
+        <h2>Tools discussed in this session</h2>
+      </div>
+    </div>
+    <div class="stop-body">
+      <div class="tool-grid">
+        <div class="tool-card" onclick="openToolModal('planning')" tabindex="0" role="button" aria-haspopup="dialog">
+          <span class="tag">Planning</span>
+          <h4>Copilot Chat</h4>
+          <p>Free standalone chat — paste a standard or outline and get a draft lesson or unit to build from.</p>
+        </div>
+        <div class="tool-card" onclick="openToolModal('notebook')" tabindex="0" role="button" aria-haspopup="dialog">
+          <span class="tag">Notebook</span>
+          <h4>Copilot Notebooks</h4>
+          <p>A free workspace that answers questions only from the reference files you add to it.</p>
+        </div>
+        <div class="tool-card" onclick="openToolModal('simulation')" tabindex="0" role="button" aria-haspopup="dialog">
+          <span class="tag">Simulation</span>
+          <h4>Learning Activities</h4>
+          <p>Turns your lesson content into a fill-in-the-blank or matching game for quick recall practice.</p>
+        </div>
+        <div class="tool-card" onclick="openToolModal('assessment')" tabindex="0" role="button" aria-haspopup="dialog">
+          <span class="tag">Assessment</span>
+          <h4>Align to Standards</h4>
+          <p>Matches a rubric, exit ticket, or lesson plan you already have to your curriculum standards.</p>
+        </div>
+        <div class="tool-card" onclick="openToolModal('industry')" tabindex="0" role="button" aria-haspopup="dialog">
+          <span class="tag">Industry</span>
+          <h4>Copilot Chat — file upload</h4>
+          <p>Upload a spreadsheet or document into the free chat and ask questions about it directly.</p>
+        </div>
+        <div class="tool-card" onclick="openToolModal('accessibility')" tabindex="0" role="button" aria-haspopup="dialog">
+          <span class="tag">Accessibility</span>
+          <h4>Modify Reading Level</h4>
+          <p>Rewrites any handout to a target reading level and can generate a glossary of key terms.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="basecamp">
+    <div class="waypoint">
+      <div class="marker">SUMMIT<br>LODGE</div>
+      <div class="label-group">
+        <span class="mono">Stop 05 — Contact</span>
+        <h2>Questions after the session?</h2>
+      </div>
+    </div>
+    <div class="stop-body contact-wrap">
+      <form onsubmit="return handleSubmit(event)">
+        <div>
+          <label for="name">Name</label>
+          <input id="name" type="text" required>
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" type="email" required>
+        </div>
+        <div>
+          <label for="message">Message</label>
+          <textarea id="message" required placeholder="Question, follow-up, or request for your school/district..."></textarea>
+        </div>
+        <button class="btn-primary" type="submit">Send message</button>
+        <p id="form-note" class="mono" style="display:none; color:var(--ridge); text-transform:none; letter-spacing:0;"></p>
+      </form>
+      <div class="contact-side">
+        <span class="mono">Direct contact</span>
+        <p>This form opens your email client with the message pre-filled — no data is stored or sent anywhere by this page. Swap in a real form handler before this goes live.</p>
+        <div class="direct">
+          <span class="mono">Email</span>
+          <p>csullivan@k12.wv.us</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <strong>Human Hands, AI Tools</strong> — Presented for CTE Instructors · WV Digital Science &amp; AI Initiative
+</footer>
+
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle" onclick="if(event.target===this) closeModal()">
+  <div class="modal-panel">
+    <div class="modal-head">
+      <div>
+        <span class="mono" id="modalEyebrow">Preview</span>
+        <h3 id="modalTitle">Title</h3>
+      </div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+
+<script>
+  var RESOURCES = {
+    prompting: {
+      title: "The Prompting Playbook",
+      eyebrow: "Resource 1 of 3 — Prompting",
+      desc: "A four-part prompt framework (Role, Task, Context, Format), trade-specific starter prompts across seven CTE pathways, and a fill-in-the-blank template you can use before opening Copilot.",
+      meta: "PDF · 3 pages",
+      file: "resources/copilot-prompting-guide.pdf"
+    },
+    lesson: {
+      title: "Building Lessons with Copilot",
+      eyebrow: "Resource 2 of 3 — Lesson Creation",
+      desc: "A six-step workflow — warm-up through closure — for turning Copilot's draft output into a real hands-on lesson, plus a fully worked example from an electrical safety unit.",
+      meta: "PDF · 3 pages",
+      file: "resources/copilot-lesson-creation.pdf"
+    },
+    beyond: {
+      title: "Beyond Chat: Other Copilot Tools",
+      eyebrow: "Resource 3 of 3 — Other Tools",
+      desc: "A tour of Copilot inside Word, PowerPoint/Designer, Excel, and Copilot Chat with your own files — plus responsible-use notes for handling student data.",
+      meta: "PDF · 2 pages",
+      file: "resources/copilot-beyond-chat.pdf"
+    }
+  };
+
+  var TOOLS = {
+    planning: {
+      tag: "Planning", title: "Copilot Chat",
+      desc: "The general-purpose Copilot chat window, free for every Microsoft 365 Education account — no add-on license required. Paste in a program standard, a topic, or last week's lesson and ask for a rough draft of a warm-up, outline, or activity to build from. This is the tool to reach for first; the other five below are more specialized.",
+      link: "https://copilot.microsoft.com"
+    },
+    notebook: {
+      tag: "Notebook", title: "Copilot Notebooks",
+      desc: "A persistent workspace that rolled out to free Copilot Chat (Basic) users in June 2026 — no paid add-on required. Add your reference materials — a safety code, a curriculum guide, a set of past lesson plans — and Copilot answers questions grounded only in those files instead of guessing from general web knowledge. Good for keeping one notebook per course that every lesson-planning prompt can pull from.",
+      link: "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-with-microsoft-365-copilot-notebooks"
+    },
+    simulation: {
+      tag: "Simulation", title: "Learning Activities (Teach module)",
+      desc: "Part of the free Teach module inside the Microsoft 365 Copilot app. Paste in your lesson content and it generates a fill-in-the-blank exercise or matching game automatically, with basic performance analytics. Good for quick recall practice on tool names, safety steps, or vocabulary before hands-on shop or lab time — not a substitute for real equipment practice.",
+      link: "https://support.microsoft.com/en-us/education/teach-in-the-microsoft-365-copilot-app"
+    },
+    assessment: {
+      tag: "Assessment", title: "Align to Standards (Teach module)",
+      desc: "Also part of the free Teach module. Paste in a rubric, exit ticket, or lesson plan you already use, and it aligns the content to your curriculum standards — useful for documenting exactly where a CTE program standard is covered without redoing the alignment by hand.",
+      link: "https://support.microsoft.com/en-us/education/teach-in-the-microsoft-365-copilot-app"
+    },
+    industry: {
+      tag: "Industry", title: "Copilot Chat — file upload",
+      desc: "The free Copilot Chat tier includes file upload — attach a spreadsheet, inventory list, or order form directly into the chat and ask questions about it, no in-app Excel add-on license required. It's a lighter-weight version of the same inventory, quoting, and scheduling analysis many employers already use Copilot for, so students see the underlying skill even without the paid embedded version.",
+      link: "https://copilot.microsoft.com"
+    },
+    accessibility: {
+      tag: "Accessibility", title: "Modify Reading Level (Teach module)",
+      desc: "Paste or upload any handout and get a version rewritten to a target reading level, with an optional glossary of key terms that keeps the important vocabulary intact rather than simplifying it away. Built specifically for differentiating one piece of content across a mixed-level classroom.",
+      link: "https://support.microsoft.com/en-us/education/copilot/modify-reading-level"
+    }
+  };
+
+  document.addEventListener('keydown', function(e){
+    if((e.key === 'Enter' || e.key === ' ') && document.activeElement.getAttribute('role') === 'button'){
+      e.preventDefault();
+      document.activeElement.click();
+    }
+  });
+
+  var lastFocused = null;
+
+  function openModalBase(){
+    lastFocused = document.activeElement;
+    var backdrop = document.getElementById('modalBackdrop');
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('modalClose') || null;
+    document.addEventListener('keydown', onModalKeydown);
+    setTimeout(function(){ document.querySelector('.modal-close').focus(); }, 50);
+  }
+
+  function onModalKeydown(e){
+    if(e.key === 'Escape') closeModal();
+  }
+
+  function closeModal(){
+    var backdrop = document.getElementById('modalBackdrop');
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', onModalKeydown);
+    if(lastFocused) lastFocused.focus();
+  }
+
+  function openResourceModal(key){
+    var r = RESOURCES[key];
+    document.getElementById('modalEyebrow').textContent = r.eyebrow;
+    document.getElementById('modalTitle').textContent = r.title;
+    document.getElementById('modalBody').innerHTML =
+      '<p class="modal-desc">' + r.desc + '</p>' +
+      '<div class="modal-frame-wrap"><iframe src="' + r.file + '" title="' + r.title + ' preview"></iframe></div>';
+    document.getElementById('modalFoot').innerHTML =
+      '<span class="filemeta">' + r.meta + '</span>' +
+      '<a class="btn-download" href="' + r.file + '" download>Download PDF</a>';
+    openModalBase();
+  }
+
+  function openToolModal(key){
+    var t = TOOLS[key];
+    document.getElementById('modalEyebrow').textContent = t.tag + ' tool';
+    document.getElementById('modalTitle').textContent = t.title;
+    document.getElementById('modalBody').innerHTML =
+      '<div class="modal-tag-row"><span class="tag" style="width:fit-content;">' + t.tag + '</span></div>' +
+      '<p class="modal-desc">' + t.desc + '</p>';
+    document.getElementById('modalFoot').innerHTML =
+      '<span class="filemeta">Opens in a new tab</span>' +
+      '<a class="btn-download" href="' + t.link + '" target="_blank" rel="noopener">Visit tool ↗</a>';
+    openModalBase();
+  }
+</script>
+
+<script>
+function handleSubmit(e){
+  e.preventDefault();
+  var name = document.getElementById('name').value;
+  var email = document.getElementById('email').value;
+  var message = document.getElementById('message').value;
+  var subject = encodeURIComponent('Human Hands, AI Tools — follow-up from ' + name);
+  var body = encodeURIComponent(message + '\n\n— ' + name + ' (' + email + ')');
+  window.location.href = 'mailto:csullivan@k12.wv.us?subject=' + subject + '&body=' + body;
+  var note = document.getElementById('form-note');
+  note.style.display = 'block';
+  note.textContent = 'Opening your email client...';
+  return false;
+}
+</script>
+
+</body>
+</html>
